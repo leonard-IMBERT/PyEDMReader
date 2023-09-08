@@ -53,7 +53,7 @@ wheel.packages = ["src/<package>", "<package>", "src/PyEDMReader"]
 # is less than this value, or on PyPy, this will be ignored.  Setting the api to
 # "py3" or "py2.py3" would build wheels that don't depend on Python (ctypes,
 # etc).
-wheel.py-api = "cp37"
+wheel.py-api = ""
 
 # Setting this to true will expand tags (universal2 will add Intel and Apple
 # Silicon tags, for pip <21.0.1 compatibility).

@@ -4,6 +4,12 @@ if(NOT DEFINED ENV{JUNOTOP})
   message(FATAL_ERROR "[JUNO] This need to be setup and built inside of a JUNO environment. Please source the environement before building the project")
 endif()
 
+if(NOT DEFINED ENV{WORKTOP})
+  set(TOP $ENV{JUNOTOP})
+else()
+  set(TOP $ENV{WORKTOP})
+endif()
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -62,7 +68,7 @@ set_target_properties(CLHEP PROPERTIES
   IMPORTED_LOCATION "${CLHEP_LOCATION}")
 
 include(GNUInstallDirs)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} $ENV{JUNOTOP}/junosw/cmake/Modules/)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} $TOP/junosw/cmake/Modules/  $TOP/junosw/cmake/legacy/Modules/)
 
 include(PKG)
 include(EDM)
@@ -70,8 +76,8 @@ include(EDM)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_subdirectory($ENV{JUNOTOP}/junosw/XmlObjDesc XmlObjDesc)
-add_subdirectory($ENV{JUNOTOP}/junosw/DataModel DataModel)
+add_subdirectory($TOP/junosw/XmlObjDesc XmlObjDesc)
+add_subdirectory($TOP/junosw/DataModel DataModel)
 
 add_library(EDMReader SHARED
   src/EDMReader.cc
@@ -82,7 +88,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 target_include_directories(EDMReader PRIVATE
-  $ENV{JUNOTOP}/junosw/InstallArea/include)
+  $TOP/junosw/InstallArea/include)
 
 set_target_properties(EDMReader PROPERTIES
   VERSION ${PROJECT_VERSION}
