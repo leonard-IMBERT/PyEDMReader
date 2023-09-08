@@ -68,7 +68,7 @@ set_target_properties(CLHEP PROPERTIES
   IMPORTED_LOCATION "${CLHEP_LOCATION}")
 
 include(GNUInstallDirs)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} $TOP/junosw/cmake/Modules/  $TOP/junosw/cmake/legacy/Modules/)
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake  ${CMAKE_MODULE_PATH} ${TOP}/junosw/cmake/Modules/  ${TOP}/junosw/cmake/legacy/Modules/)
 
 include(PKG)
 include(EDM)
@@ -76,8 +76,8 @@ include(EDM)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_subdirectory($TOP/junosw/XmlObjDesc XmlObjDesc)
-add_subdirectory($TOP/junosw/DataModel DataModel)
+add_subdirectory(${TOP}/junosw/XmlObjDesc XmlObjDesc)
+add_subdirectory(${TOP}/junosw/DataModel DataModel)
 
 add_library(EDMReader SHARED
   src/EDMReader.cc
@@ -88,7 +88,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 target_include_directories(EDMReader PRIVATE
-  $TOP/junosw/InstallArea/include)
+  ${TOP}/junosw/InstallArea/include)
 
 set_target_properties(EDMReader PROPERTIES
   VERSION ${PROJECT_VERSION}
