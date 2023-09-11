@@ -59,7 +59,7 @@ find_package(ROOT REQUIRED)
 include_directories(${Python_INCLUDE_DIRS} ${ROOT_INCLUDE_DIRS} $ENV{JUNOTOP}/junosw/InstallArea/include ${pybind11_INCLUDE_DIR})
 
 # ================== C++ Lib ==================
-project(EDMReader VERSION 0.1.0 DESCRIPTION "Library optimized to read JUNO EDM files")
+project(EDMReader VERSION 1.0.0 DESCRIPTION "Library optimized to read JUNO EDM files")
 
 find_library(CLHEP_LOCATION "CLHEP" HINT ENV LD_LIBRARY_PATH)
 
@@ -112,7 +112,7 @@ install(FILES src/EDMReader.hpp
 
 # ===================Python bindings ========
 
-project(PyEDMReader LANGUAGES CXX VERSION 0.1.0)
+project(PyEDMReader LANGUAGES CXX VERSION 0.2.0)
 
 pybind11_add_module(PyEDMReader MODULE
   src/PyBinding.cpp
