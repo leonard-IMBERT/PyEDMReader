@@ -1,5 +1,5 @@
 from typing import Union
-from janne.interfaces.imodel import IModel
+from janne.interfaces import IDecoder
 from dataclasses import dataclass
 from .PyEDMReader import EDMReader
 from enum import Enum
@@ -14,7 +14,7 @@ class JaEDMReaderConfig:
     filepath: str
     mode: EventMode
 
-class JaEDMReader(IModel):
+class JaEDMReader(IDecoder):
 
     def __init__(self, config: Union[JaEDMReaderConfig, None] = None):
         super()
