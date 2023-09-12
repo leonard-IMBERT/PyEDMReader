@@ -1,3 +1,4 @@
+from typing import Union
 from janne.interfaces.imodel import IModel
 from dataclasses import dataclass
 from .PyEDMReader import EDMReader
@@ -15,7 +16,7 @@ class JaEDMReaderConfig:
 
 class JaEDMReader(IModel):
 
-    def __init__(self, config: JaEDMReaderConfig | None = None):
+    def __init__(self, config: Union[JaEDMReaderConfig, None] = None):
         super()
         if config:
             self.config = config
