@@ -27,27 +27,29 @@ class JaEDMReader(IDecoder):
     def initialize(self, config: JaEDMReaderConfig):
         self.config = config
         self.reader = EDMReader(config.filepath)
+        self.evt_count = 0
 
     def __next__(self):
         if self.reader is None:
             raise RuntimeError("Reader not yet initialize. Please initialize it first")
 
-        evt_count = 0
-        while evt_count < self.reader.size():
-            evt = self.reader.get_event(evt_count)
-            truth = None
-            if evt.truth is not None:
-                truth = np.array([evt.truth.edep, evt.truth.edepX, evt.truth.edepY, evt.truth.edepZ])
-            signal = None
-            if self.config.mode == EventMode.DETSIM: signal = evt.detsim_hits
-            if self.config.mode == EventMode.CALIB: signal = evt.calib_hits
+        if self.evt_count >= self.reader.size():
+            raise StopIteration
 
-            if signal is None:
-                raise StopIteration
+        evt = self.reader.get_event(self.evt_count)
+        truth = None
+        if evt.truth is not None:
+            truth = np.array([evt.truth.edep, evt.truth.edepX, evt.truth.edepY, evt.truth.edepZ])
+        signal = None
+        if self.config.mode == EventMode.DETSIM: signal = evt.detsim_hits
+        if self.config.mode == EventMode.CALIB: signal = evt.calib_hits
 
-            signal = np.array([[hit.pmtID, hit.charge, hit.tofh] for hit in signal])
+        if signal is None:
+            raise StopIteration
 
-            yield (signal, truth)
+        signal = np.array([[hit.pmtID, hit.charge, hit.tofh] for hit in signal])
 
-            evt_count += 1
+
+        self.evt_count += 1
+        return (signal, truth)
 
