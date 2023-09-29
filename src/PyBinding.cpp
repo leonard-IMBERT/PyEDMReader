@@ -34,5 +34,5 @@ PYBIND11_MODULE(PyEDMReader, m) {
       .def_readonly("charge", &EDMReader::Hit::charge)
       .def_readonly("tofh", &EDMReader::Hit::tofh);
 
-  m.attr("__version__") = "0.3.0";
+  m.attr("__version__") = "0.3.1";
 }

@@ -5,7 +5,7 @@ for path in __path__:
     _ctypes.cdll.LoadLibrary(_os.path.join(path, "libEDMReader.so"))
 
 from .PyEDMReader import EDMReader, Event, Hit, Truth, __doc__, __version__
-from . import JaEDMReader as janne
+from _jaedmreader import JaEDMReader, JaEDMReaderConfig
 
 
 __all__ = [
@@ -13,7 +13,8 @@ __all__ = [
         "Event",
         "Hit",
         "Truth",
-        "janne",
+        "JaEDMReader",
+        "JaEDMReaderConfig",
         "__doc__",
         "__version__"
         ]
