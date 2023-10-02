@@ -2,7 +2,7 @@ from typing import Optional
 from janne.interfaces import IDecoder
 from dataclasses import dataclass
 
-from . import EDMReader
+from .PyEDMReader import EDMReader
 from enum import Enum
 import numpy as np
 
