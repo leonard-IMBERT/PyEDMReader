@@ -112,7 +112,7 @@ install(FILES src/EDMReader.hpp
 
 # ===================Python bindings ========
 
-project(PyEDMReader LANGUAGES CXX VERSION 0.3.2)
+project(PyEDMReader LANGUAGES CXX VERSION 0.4.0)
 
 pybind11_add_module(PyEDMReader MODULE
   src/PyBinding.cpp
