@@ -43,14 +43,8 @@ class JaEDMReader(IDecoder):
         if evt.truth is not None:
             truth = np.array([evt.truth.edep, evt.truth.edepX, evt.truth.edepY, evt.truth.edepZ], dtype=np.float64)
         signal = None
-        if self._mode == EventMode.DETSIM: signal = evt.detsim_hits
-        if self._mode == EventMode.CALIB: signal = evt.calib_hits
-
-        if signal is None:
-            raise StopIteration
-
-        signal = np.array([[hit.pmtID, hit.charge, hit.tofh] for hit in signal], dtype=np.float64)
-
+        if self._mode == EventMode.DETSIM: signal = np.array(evt.detsim_hits, copy=False)
+        if self._mode == EventMode.CALIB: signal = np.array(evt.calib_hits, copy=False)
 
         self._evt_count += 1
         return (signal, truth)

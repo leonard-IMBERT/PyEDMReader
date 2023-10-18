@@ -29,6 +29,11 @@ PYBIND11_MODULE(PyEDMReader, m) {
       .def_readonly("edepX", &EDMReader::Truth::edepX)
       .def_readonly("edepY", &EDMReader::Truth::edepY)
       .def_readonly("edepZ", &EDMReader::Truth::edepZ);
+  py::class_<EDMReader::Hits>(m, "Hits", py::buffer_protocol()).def_buffer([](EDMReader::Hits &h) -> py::buffer_info {
+    return py::buffer_info(h.data_buffer(), sizeof(double), py::format_descriptor<double>::format(), 2,
+                           {(py::ssize_t)h.size(), (py::ssize_t)3},
+                           {(py::ssize_t)(sizeof(double) * 3), (py::ssize_t)sizeof(double)});
+  });
   py::class_<EDMReader::Hit>(m, "Hit")
       .def_readonly("pmtID", &EDMReader::Hit::pmtID)
       .def_readonly("charge", &EDMReader::Hit::charge)

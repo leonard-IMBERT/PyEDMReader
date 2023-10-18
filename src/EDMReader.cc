@@ -67,14 +67,10 @@ Event EDMReader::getEvent(const long idx) {
 
     evt.truth = {edep, qedep, evis, edepX, edepY, edepZ};
 
-    evt.detsim_hits = std::vector<Hit>();
-    evt.detsim_hits->reserve(_sim_evt->getCDHitsVec().size());
-    for (const auto& hit : _sim_evt->getCDHitsVec()) {
-      evt.detsim_hits->push_back({
-          hit->getPMTID(),
-          (double)hit->getNPE(),
-          hit->getHitTime(),
-      });
+    evt.detsim_hits = Hits(_sim_evt->getCDHitsVec().size());
+    for (size_t hit_idx = 0; hit_idx < evt.detsim_hits->size(); ++hit_idx) {
+      const auto& hit = _sim_evt->getCDHitsVec()[hit_idx];
+      evt.detsim_hits->PutHit(hit_idx, hit->getPMTID(), (double)hit->getNPE(), hit->getHitTime());
     }
   }
 
@@ -83,14 +79,15 @@ Event EDMReader::getEvent(const long idx) {
       throw std::out_of_range("The file does not enough entries in its calib tree");
     }
 
-    evt.calib_hits = std::vector<Hit>();
-    evt.calib_hits->reserve(_calib_evt->calibPMTCol().size());
+    evt.calib_hits = Hits(_calib_evt->calibPMTCol().size());
 
+    size_t hit_idx = 0;
     for (const auto& channel : _calib_evt->calibPMTCol()) {
-      evt.calib_hits->push_back(
-          {(channel->pmtId() & MODULE_MASK) >> MODULE_INDEX, channel->sumCharge(), channel->firstHitTime()});
+      evt.calib_hits->PutHit(hit_idx++, (channel->pmtId() & MODULE_MASK) >> MODULE_INDEX, channel->sumCharge(),
+                             channel->firstHitTime());
     }
   }
+
   return evt;
 }
 

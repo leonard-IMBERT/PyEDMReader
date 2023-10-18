@@ -53,7 +53,7 @@ struct Hit {
   /**
    * @pmtID The ID of the pmt
    **/
-  long pmtID;
+  double pmtID;
   /**
    * @charge Charge collected by the pmt [Npe]
    * */
@@ -62,6 +62,28 @@ struct Hit {
    * @tofh Time of first hit of the pmt [ns]
    **/
   double tofh;
+};
+
+struct Hits {
+  Hits(size_t n_hits) : _n_hits(n_hits) { _data = std::shared_ptr<double[]>(new double[_n_hits * 3]); }
+
+  void PutHit(size_t hit_idx, long pmtID, double charge, double tofh) {
+    _data[hit_idx * 3] = (double)pmtID;
+    _data[(hit_idx * 3) + 1] = charge;
+    _data[(hit_idx * 3) + 2] = tofh;
+  }
+
+  const Hit GetHit(size_t hit_idx) const {
+    return Hit{_data[hit_idx * 3], _data[(hit_idx * 3) + 1], _data[(hit_idx * 3) + 2]};
+  }
+
+  size_t size() const { return _n_hits; }
+
+  double* data_buffer() { return _data.get(); }
+
+ private:
+  std::shared_ptr<double[]> _data;
+  size_t _n_hits;
 };
 
 /**
@@ -76,11 +98,11 @@ struct Event {
   /**
    * @detsim_hits Hits at detsim level
    **/
-  std::optional<std::vector<Hit>> detsim_hits;
+  std::optional<Hits> detsim_hits;
   /**
    * @calib_hits Hits at calib level
    **/
-  std::optional<std::vector<Hit>> calib_hits;
+  std::optional<Hits> calib_hits;
 };
 
 /**
@@ -90,13 +112,13 @@ struct Event {
  **/
 class EDMReader {
  public:
-   /**
-    * @brief construct an EDMReader from a filepath
-    *
-    * @param filename Filepath to the file to read
-    *
-    * @throw std::invalid_argument if cannot read the file
-    **/
+  /**
+   * @brief construct an EDMReader from a filepath
+   *
+   * @param filename Filepath to the file to read
+   *
+   * @throw std::invalid_argument if cannot read the file
+   **/
   EDMReader(const std::string filename);
 
   /**
