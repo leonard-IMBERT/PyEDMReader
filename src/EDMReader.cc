@@ -20,6 +20,17 @@ EDMReader::EDMReader(const std::string filename)
   }
 }
 
+// TODO: Delete TFile Access
+
+EDMReader::~EDMReader() {
+  if(_source_file != nullptr && !(_source_file->IsZombie())) {
+    _source_file->Close("R");
+  }
+
+  delete _source_file;
+}
+
+
 long EDMReader::size() {
   if (_calib_tree != nullptr) return _calib_tree->GetEntries();
   if (_detsim_tree != nullptr) return _detsim_tree->GetEntries();

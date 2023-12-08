@@ -122,6 +122,11 @@ class EDMReader {
   EDMReader(const std::string filename);
 
   /**
+   * @brief Destruct an EDMReader
+   **/
+  ~EDMReader();
+
+  /**
    * @brief Retrieve the event located at idx
    *
    * @param idx The index of the event to read

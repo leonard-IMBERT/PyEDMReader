@@ -97,8 +97,11 @@ set_target_properties(EDMReader PROPERTIES
 
 target_link_libraries(EDMReader
   ${ROOT_LIBRARIES}
+  CLHEPDict
+  HepMCDict
   SimEvent
   CalibEvent
+  CLHEP
   )
 
 set_target_properties(EDMReader PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
@@ -112,7 +115,7 @@ install(FILES src/EDMReader.hpp
 
 # ===================Python bindings ========
 
-project(PyEDMReader LANGUAGES CXX VERSION 0.4.0)
+project(PyEDMReader LANGUAGES CXX VERSION 0.4.1)
 
 pybind11_add_module(PyEDMReader MODULE
   src/PyBinding.cpp
