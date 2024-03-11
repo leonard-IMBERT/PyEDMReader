@@ -55,17 +55,22 @@ endif()
 
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${ROOT_PREFIX_PATH})
 
-find_package(ROOT REQUIRED)
+find_package(ROOT REQUIRED Tree)
 include_directories(${Python_INCLUDE_DIRS} ${ROOT_INCLUDE_DIRS} $ENV{JUNOTOP}/junosw/InstallArea/include ${pybind11_INCLUDE_DIR})
+
+# ================== CLHEP ====================
+
+add_subdirectory(CLHEP)
+#include(${CMAKE_CURRENT_SOURCE_DIR}/CLHEP/CMakeLists.txt)
 
 # ================== C++ Lib ==================
 project(EDMReader VERSION 1.0.0 DESCRIPTION "Library optimized to read JUNO EDM files")
 
-find_library(CLHEP_LOCATION "CLHEP" HINT ENV LD_LIBRARY_PATH)
-
-add_library(CLHEP SHARED IMPORTED)
-set_target_properties(CLHEP PROPERTIES
-  IMPORTED_LOCATION "${CLHEP_LOCATION}")
+#find_library(CLHEP_LOCATION "CLHEP" HINT ENV LD_LIBRARY_PATH)
+#
+#add_library(CLHEP SHARED IMPORTED)
+#set_target_properties(CLHEP PROPERTIES
+#  IMPORTED_LOCATION "${CLHEP_LOCATION}")
 
 include(GNUInstallDirs)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake  ${CMAKE_MODULE_PATH} ${TOP}/junosw/cmake/Modules/  ${TOP}/junosw/cmake/legacy/Modules/)
@@ -115,7 +120,7 @@ install(FILES src/EDMReader.hpp
 
 # ===================Python bindings ========
 
-project(PyEDMReader LANGUAGES CXX VERSION 0.4.1)
+project(PyEDMReader LANGUAGES CXX VERSION 0.5.0)
 
 pybind11_add_module(PyEDMReader MODULE
   src/PyBinding.cpp
