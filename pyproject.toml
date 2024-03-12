@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "PyEDMReader"
-version = "0.5.0"
+version = "0.5.1"
 authors = [
   { name="Leonard Imbert", email="imbert@subatech.in2p3.fr" },
 ]
@@ -25,7 +25,7 @@ ninja.make-fallback = true
 # Extra args for CMake. Pip, unlike build, does not support lists, so semicolon
 # can be used to separate. Setting this in config or envvar will override the
 # entire list. See also cmake.define.
-cmake.args = [ "-DPYTHON_BINDING=ON" ]
+cmake.args = [ "-DPYTHON_BINDING=ON" ,"-Dmomentum=MEV", "-Dlength=CM" ]
 
 # This activates verbose builds
 cmake.verbose = false

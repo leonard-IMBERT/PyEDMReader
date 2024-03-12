@@ -61,6 +61,7 @@ include_directories(${Python_INCLUDE_DIRS} ${ROOT_INCLUDE_DIRS} $ENV{JUNOTOP}/ju
 # ================== CLHEP ====================
 
 add_subdirectory(CLHEP)
+add_subdirectory(HepMc)
 #include(${CMAKE_CURRENT_SOURCE_DIR}/CLHEP/CMakeLists.txt)
 
 # ================== C++ Lib ==================
@@ -103,6 +104,7 @@ set_target_properties(EDMReader PROPERTIES
 target_link_libraries(EDMReader
   ${ROOT_LIBRARIES}
   CLHEPDict
+  HepMC
   HepMCDict
   SimEvent
   CalibEvent
@@ -120,7 +122,7 @@ install(FILES src/EDMReader.hpp
 
 # ===================Python bindings ========
 
-project(PyEDMReader LANGUAGES CXX VERSION 0.5.0)
+project(PyEDMReader LANGUAGES CXX VERSION 0.5.1)
 
 pybind11_add_module(PyEDMReader MODULE
   src/PyBinding.cpp

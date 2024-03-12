@@ -1,3 +1,6 @@
 [submodule "CLHEP"]
 	path = CLHEP
 	url = https://gitlab.cern.ch/CLHEP/CLHEP.git
+[submodule "HepMc"]
+	path = HepMc
+	url = https://gitlab.cern.ch/hepmc/HepMC.git
