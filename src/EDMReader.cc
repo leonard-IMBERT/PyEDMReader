@@ -241,8 +241,9 @@ Event EDMReader::getEvent(const long idx) {
       if (!is_cd(channel->pmtId())) continue;
 
       if (auto copy_no = id2copyNo.find(channel->pmtId()); copy_no == id2copyNo.end()) {
-        std::cerr << "[Warning] No pmt with id 0x" << std::hex << channel->pmtId() << std::dec << ", skipping"
+        std::cerr << "[Warning] No pmt with id 0x" << std::hex << channel->pmtId() << std::dec << ", Id will be the original file id"
                   << std::endl;
+        evt.calib_hits->PutHit(hit_idx++, channel->pmtId(), channel->sumCharge(), channel->firstHitTime());
       } else {
         evt.calib_hits->PutHit(hit_idx++, copy_no->second, channel->sumCharge(), channel->firstHitTime());
       }
@@ -252,8 +253,9 @@ Event EDMReader::getEvent(const long idx) {
       if (!is_cd(channel->pmtId())) continue;
 
       if (auto copy_no = id2copyNo.find(channel->pmtId()); copy_no == id2copyNo.end()) {
-        std::cerr << "[Warning] No pmt with id 0x" << std::hex << channel->pmtId() << std::dec << ", skipping"
+        std::cerr << "[Warning] No pmt with id 0x" << std::hex << channel->pmtId() << std::dec << ", Id will be the original file id"
                   << std::endl;
+        evt.calib_hits->PutHit(hit_idx++, channel->pmtId(), channel->sumCharge(), channel->firstHitTime());
       } else {
         // Relocate the spmt_id to be 300'000 + pmt_id
         evt.calib_hits->PutHit(hit_idx++, (copy_no->second - MODULE_3INCH_MIN) + OFFSET_3INCH, channel->sumCharge(),
