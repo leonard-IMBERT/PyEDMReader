@@ -35,7 +35,7 @@ endif()
 
 # ================== Python binding ===========
 
-execute_process(COMMAND python3 -m pybind11 --cmake
+execute_process(COMMAND python3.9 -m pybind11 --cmake
   COMMAND tr -d \\n
   RESULT_VARIABLE PYBIND_PRESENT
   OUTPUT_VARIABLE PYBIND_OUTPUT_PATH)
@@ -45,7 +45,7 @@ else()
   set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${PYBIND_OUTPUT_PATH})
 
   find_package(pybind11 CONFIG REQUIRED)
-  find_package(Python REQUIRED COMPONENTS Interpreter Development)
+  find_package(Python 3.9 REQUIRED COMPONENTS Interpreter Development)
 
   message(STATUS "[Pybind11] Python binding enabled and found")
 endif()
