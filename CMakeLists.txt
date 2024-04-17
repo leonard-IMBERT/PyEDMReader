@@ -114,6 +114,8 @@ install(TARGETS EDMReader
 
 install(FILES src/EDMReader.hpp
   TYPE INCLUDE)
+install(DIRECTORY dat
+  TYPE DATA)
 
 # ===================Python bindings ========
 
