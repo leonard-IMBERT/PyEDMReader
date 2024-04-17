@@ -60,18 +60,15 @@ include_directories(${Python_INCLUDE_DIRS} ${ROOT_INCLUDE_DIRS} $ENV{JUNOTOP}/ju
 
 # ================== CLHEP ====================
 
-add_subdirectory(CLHEP)
-add_subdirectory(HepMc)
-#include(${CMAKE_CURRENT_SOURCE_DIR}/CLHEP/CMakeLists.txt)
 
 # ================== C++ Lib ==================
 project(EDMReader VERSION 1.0.0 DESCRIPTION "Library optimized to read JUNO EDM files")
 
-#find_library(CLHEP_LOCATION "CLHEP" HINT ENV LD_LIBRARY_PATH)
-#
-#add_library(CLHEP SHARED IMPORTED)
-#set_target_properties(CLHEP PROPERTIES
-#  IMPORTED_LOCATION "${CLHEP_LOCATION}")
+find_library(CLHEP_LOCATION "CLHEP" HINT ENV LD_LIBRARY_PATH)
+
+add_library(CLHEP SHARED IMPORTED)
+set_target_properties(CLHEP PROPERTIES
+  IMPORTED_LOCATION "${CLHEP_LOCATION}")
 
 include(GNUInstallDirs)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake  ${CMAKE_MODULE_PATH} ${TOP}/junosw/cmake/Modules/  ${TOP}/junosw/cmake/legacy/Modules/)
@@ -104,8 +101,6 @@ set_target_properties(EDMReader PROPERTIES
 target_link_libraries(EDMReader
   ${ROOT_LIBRARIES}
   CLHEPDict
-  HepMC
-  HepMCDict
   SimEvent
   CalibEvent
   CLHEP

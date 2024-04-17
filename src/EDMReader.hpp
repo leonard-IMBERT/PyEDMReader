@@ -2,6 +2,7 @@
 #define EDM_READER_H
 
 #include <Event/CdLpmtCalibEvt.h>
+#include <Event/CdSpmtCalibEvt.h>
 #include <Event/SimEvt.h>
 #include <TBuffer.h>
 #include <TDirectory.h>
@@ -12,6 +13,10 @@
 
 #include <optional>
 #include <string>
+
+const std::string SPMT_ID_FILE = "pmt_20230809_CDSPMT.csv";
+const std::string LPMT_ID_FILE = "pmt_20230831_CDLPMT.csv";
+
 
 namespace EDMReader {
 
@@ -147,8 +152,13 @@ class EDMReader {
   JM::SimEvt* _sim_evt = nullptr;
   TTree* _detsim_tree = nullptr;
 
-  JM::CdLpmtCalibEvt* _calib_evt = nullptr;
-  TTree* _calib_tree = nullptr;
+  JM::CdLpmtCalibEvt* _lpmt_calib_evt = nullptr;
+  TTree* _lpmt_calib_tree = nullptr;
+
+  JM::CdSpmtCalibEvt* _spmt_calib_evt = nullptr;
+  TTree* _spmt_calib_tree = nullptr;
+
+  std::unordered_map<unsigned int, unsigned int> id2copyNo;
 };
 
 }  // namespace EDMReader
