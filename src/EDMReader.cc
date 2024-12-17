@@ -66,7 +66,8 @@ static void read_file_in_map(std::string filename, std::unordered_map<unsigned i
   }
 
   std::ifstream pmt_file(std::string(env) + "/" + filename);
-  int CopyNumber, LargeOrSmall, NorthOrSouth, CircleNumber, PositionNumber, UpOrDown, PmtType, GCU, Channel;
+  int CopyNumber = 0, LargeOrSmall = 0, NorthOrSouth = 0, CircleNumber = 0, PositionNumber = 0, UpOrDown = 0,
+      PmtType = 0, GCU = 0, Channel = 0;
 
   const int N_VALUES = 9;
   std::array<int*, N_VALUES> values = {&CopyNumber, &LargeOrSmall, &NorthOrSouth, &CircleNumber, &PositionNumber,
@@ -204,9 +205,6 @@ Event EDMReader::getEvent(const long idx) {
     int n_tracks = _sim_evt->getTracksVec().size();
 
     if (n_tracks != 0) {
-      edep /= n_tracks;
-      qedep /= n_tracks;
-
       edepX /= n_tracks;
       edepZ /= n_tracks;
       edepZ /= n_tracks;
@@ -241,8 +239,8 @@ Event EDMReader::getEvent(const long idx) {
       if (!is_cd(channel->pmtId())) continue;
 
       if (auto copy_no = id2copyNo.find(channel->pmtId()); copy_no == id2copyNo.end()) {
-        std::cerr << "[Warning] No pmt with id 0x" << std::hex << channel->pmtId() << std::dec << ", Id will be the original file id"
-                  << std::endl;
+        std::cerr << "[Warning] No pmt with id 0x" << std::hex << channel->pmtId() << std::dec
+                  << ", Id will be the original file id" << std::endl;
         evt.calib_hits->PutHit(hit_idx++, channel->pmtId(), channel->sumCharge(), channel->firstHitTime());
       } else {
         evt.calib_hits->PutHit(hit_idx++, copy_no->second, channel->sumCharge(), channel->firstHitTime());
@@ -253,8 +251,8 @@ Event EDMReader::getEvent(const long idx) {
       if (!is_cd(channel->pmtId())) continue;
 
       if (auto copy_no = id2copyNo.find(channel->pmtId()); copy_no == id2copyNo.end()) {
-        std::cerr << "[Warning] No pmt with id 0x" << std::hex << channel->pmtId() << std::dec << ", Id will be the original file id"
-                  << std::endl;
+        std::cerr << "[Warning] No pmt with id 0x" << std::hex << channel->pmtId() << std::dec
+                  << ", Id will be the original file id" << std::endl;
         evt.calib_hits->PutHit(hit_idx++, channel->pmtId(), channel->sumCharge(), channel->firstHitTime());
       } else {
         // Relocate the spmt_id to be 300'000 + pmt_id

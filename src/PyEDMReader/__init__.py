@@ -4,14 +4,14 @@ import ctypes as _ctypes
 for path in __path__:
     _ctypes.cdll.LoadLibrary(_os.path.join(path, "libEDMReader.so"))
 
-from .PyEDMReader import __doc__, __version__
-from ._jaedmreader import JaEDMReader, JaEDMReaderConfig, EventMode
+from ._core import __doc__, __version__, EDMReader, Hits, Event, Hit
 
 
 __all__ = [
-        "JaEDMReader",
-        "JaEDMReaderConfig",
-        "EventMode",
         "__doc__",
-        "__version__"
+        "__version__",
+        "EDMReader",
+        "Hits",
+        "Event",
+        "Hit"
         ]

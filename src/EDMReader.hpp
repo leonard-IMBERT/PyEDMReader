@@ -13,6 +13,7 @@
 
 #include <optional>
 #include <string>
+#include <sstream>
 
 const std::string SPMT_ID_FILE = "pmt_20230809_CDSPMT.csv";
 const std::string LPMT_ID_FILE = "pmt_20230831_CDLPMT.csv";
@@ -72,18 +73,51 @@ struct Hit {
 struct Hits {
   Hits(size_t n_hits) : _n_hits(n_hits) { _data = std::shared_ptr<double[]>(new double[_n_hits * 3]); }
 
+  /**
+   * @brief Put a hit at the designated index
+   *
+   * @param hit_idx Index to modify
+   * @param pmtID Id of the PMT hit
+   * @param charge Charge in the PMT (recommended in Npe)
+   * @param tofh Time Of First Hit (recommended in ns)
+   */
   void PutHit(size_t hit_idx, long pmtID, double charge, double tofh) {
     _data[hit_idx * 3] = (double)pmtID;
     _data[(hit_idx * 3) + 1] = charge;
     _data[(hit_idx * 3) + 2] = tofh;
   }
 
+  /**
+   * @brief Get the hit at the index hit_idx
+   *
+   * @param hit_idx The index of the hit to get
+   * @throws std::out_of_range Throw an exception if you try to access an index outside the size of the collection
+   * @return A Hit struct containin the requested hit
+   */
   const Hit GetHit(size_t hit_idx) const {
+    if(hit_idx >= _n_hits) {
+      std::stringstream s;
+      s << "Hit with index " << hit_idx << " is out of range of hit collection of size " << _n_hits;
+      throw std::out_of_range(s.str());
+    }
+
     return Hit{_data[hit_idx * 3], _data[(hit_idx * 3) + 1], _data[(hit_idx * 3) + 2]};
   }
 
+  /**
+   * @brief Return the size of the collection
+   *
+   * @return The size of the collection
+   */
   size_t size() const { return _n_hits; }
 
+  /**
+   * @brief Return a raw pointer to the underlying data
+   *
+   * DO NOT DELETE THIS POINTER. The Hits class handle its deallocation.
+   *
+   * @return A raw pointer to the underlying data
+   */
   double* data_buffer() { return _data.get(); }
 
  private:

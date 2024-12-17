@@ -35,7 +35,7 @@ endif()
 
 # ================== Python binding ===========
 
-execute_process(COMMAND python3.9 -m pybind11 --cmake
+execute_process(COMMAND python3 -m pybind11 --cmake
   COMMAND tr -d \\n
   RESULT_VARIABLE PYBIND_PRESENT
   OUTPUT_VARIABLE PYBIND_OUTPUT_PATH)
@@ -45,7 +45,7 @@ else()
   set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${PYBIND_OUTPUT_PATH})
 
   find_package(pybind11 CONFIG REQUIRED)
-  find_package(Python 3.9 REQUIRED COMPONENTS Interpreter Development)
+  find_package(Python 3 REQUIRED COMPONENTS Interpreter Development)
 
   message(STATUS "[Pybind11] Python binding enabled and found")
 endif()
@@ -70,17 +70,29 @@ add_library(CLHEP SHARED IMPORTED)
 set_target_properties(CLHEP PROPERTIES
   IMPORTED_LOCATION "${CLHEP_LOCATION}")
 
-include(GNUInstallDirs)
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake  ${CMAKE_MODULE_PATH} ${TOP}/junosw/cmake/Modules/  ${TOP}/junosw/cmake/legacy/Modules/)
+option(BUILD_FOR_BUNDLE "Build the library for bundling -- recompile and bring the EDM" OFF)
 
-include(PKG)
-include(EDM)
+if(BUILD_FOR_BUNDLE)
+  include(GNUInstallDirs)
+
+  list(APPEND CMAKE_MODULE_PATH "${TOP}/junosw")
+  list(APPEND CMAKE_MODULE_PATH "${TOP}/junosw/cmake/legacy/Modules")
+
+  include(cmake/legacy/JUNODependencies)
+
+  # add macros
+  include(PKG)
+  include(EDM)
+
+  add_subdirectory(${TOP}/junosw/XmlObjDesc XmlObjDesc)
+  add_subdirectory(${TOP}/junosw/DataModel DataModel)
+else()
+  link_directories($ENV{JUNOTOP}/junosw/InstallArea/lib $ENV{JUNOTOP}/junosw/InstallArea/lib64)
+endif()
+
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-add_subdirectory(${TOP}/junosw/XmlObjDesc XmlObjDesc)
-add_subdirectory(${TOP}/junosw/DataModel DataModel)
 
 add_library(EDMReader SHARED
   src/EDMReader.cc
@@ -121,21 +133,23 @@ install(DIRECTORY dat
 
 project(PyEDMReader LANGUAGES CXX VERSION 0.5.2)
 
-pybind11_add_module(PyEDMReader MODULE
+pybind11_add_module(_core MODULE
   src/PyBinding.cpp
   )
 
-target_link_libraries(PyEDMReader PRIVATE EDMReader)
-target_link_libraries(PyEDMReader PRIVATE
+target_link_libraries(_core PRIVATE EDMReader)
+target_link_libraries(_core PRIVATE
   ${ROOT_LIBRARIES}
   )
 
-set_target_properties(PyEDMReader PROPERTIES
+set_target_properties(_core PROPERTIES
   CXX_STANDARD 17)
 
-target_compile_definitions(PyEDMReader PRIVATE VERSION_INFO=${PROJECT_VERSION})
+target_compile_definitions(_core PRIVATE VERSION_INFO=${PROJECT_VERSION})
 
-install(TARGETS PyEDMReader DESTINATION PyEDMReader)
-install(TARGETS EDMReader DESTINATION PyEDMReader)
-install(TARGETS SimEvent DESTINATION PyEDMReader)
-install(TARGETS CalibEvent DESTINATION PyEDMReader)
+install(TARGETS _core EDMReader DESTINATION PyEDMReader)
+if(BUILD_FOR_BUNDLE)
+  install(TARGETS EDMReader DESTINATION PyEDMReader)
+  install(TARGETS SimEvent DESTINATION PyEDMReader)
+  install(TARGETS CalibEvent DESTINATION PyEDMReader)
+endif()
