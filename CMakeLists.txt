@@ -131,7 +131,7 @@ install(DIRECTORY dat
 
 # ===================Python bindings ========
 
-project(PyEDMReader LANGUAGES CXX VERSION 0.5.2)
+project(PyEDMReader LANGUAGES CXX VERSION 0.6.0)
 
 pybind11_add_module(_core MODULE
   src/PyBinding.cpp

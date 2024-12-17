@@ -107,5 +107,5 @@ PYBIND11_MODULE(_core, m) {
   )DOC";
 
 
-  m.attr("__version__") = "0.5.2";
+  m.attr("__version__") = "0.6.0";
 }

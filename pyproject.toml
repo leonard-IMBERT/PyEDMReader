@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "PyEDMReader"
-version = "0.5.2"
+version = "0.6.0"
 authors = [
   { name="Leonard Imbert", email="imbert@subatech.in2p3.fr" },
 ]
